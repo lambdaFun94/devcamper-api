@@ -1,12 +1,17 @@
+import "./config/env.js";
 import express from "express";
-import dotenv from "dotenv";
 import morgan from "morgan";
+import dotenv from "dotenv";
+import path from "path";
 import "colors";
 import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
 
+/*
 // Load env vars
-dotenv.config({ path: "./config/config.env" });
+const pathToEnvVar = path.resolve(process.cwd(), "config/config.env");
+dotenv.config({ path: pathToEnvVar });
+*/
 
 // Route  files
 import bootcampsRoutes from "./routes/bootcamps.js";
