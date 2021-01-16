@@ -14,6 +14,7 @@ dotenv.config({ path: pathToEnvVar });
 */
 
 // Route  files
+import coursesRoutes from "./routes/courses.js";
 import bootcampsRoutes from "./routes/bootcamps.js";
 
 // Connect to database
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Mount routers
+app.use("/api/v1/courses", coursesRoutes);
 app.use("/api/v1/bootcamps", bootcampsRoutes);
 
 app.use(errorHandler);
