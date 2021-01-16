@@ -7,12 +7,6 @@ import "colors";
 import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
 
-/*
-// Load env vars
-const pathToEnvVar = path.resolve(process.cwd(), "config/config.env");
-dotenv.config({ path: pathToEnvVar });
-*/
-
 // Route  files
 import coursesRoutes from "./routes/courses.js";
 import bootcampsRoutes from "./routes/bootcamps.js";
