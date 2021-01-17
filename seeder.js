@@ -48,9 +48,9 @@ const deleteData = async () => {
 
 if (process.argv[2] === "-d") {
   deleteData();
-} else if (process.argv[2] === "-r") {
-  deleteData();
+} else if (process.argv[2] === "-i") {
   importData();
 } else {
+  deleteData();
   importData();
 }

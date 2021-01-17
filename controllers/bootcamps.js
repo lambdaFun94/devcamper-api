@@ -4,7 +4,7 @@ import { asyncHandler } from "../middleware/async.js";
 import { geocoder } from "../utils/geocoder.js";
 
 // @desc     Get all Bootcamps
-// @route    GET /api/vi/bootcamps
+// @route    GET /api/v1/bootcamps
 // @access   Public
 export const getBootcamps = asyncHandler(async (req, res, next) => {
   let query;
@@ -80,7 +80,7 @@ export const getBootcamps = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     Get a single Bootcamp
-// @route    GET /api/vi/bootcamps/:id
+// @route    GET /api/v1/bootcamps/:id
 // @access   Public
 export const getBootcamp = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -94,7 +94,7 @@ export const getBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     Create a new bootcamp
-// @route    POST /api/vi/bootcamps
+// @route    POST /api/v1/bootcamps
 // @access   Private
 export const createBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.create(req.body);
@@ -106,7 +106,7 @@ export const createBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     Update bootcamp
-// @route    PUT /api/vi/bootcamps/:id
+// @route    PUT /api/v1/bootcamps/:id
 // @access   Private
 export const updateBootcamp = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -123,7 +123,7 @@ export const updateBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     Delete bootcamp
-// @route    DELETE /api/vi/bootcamps/:id
+// @route    DELETE /api/v1/bootcamps/:id
 // @access   Private
 export const deleteBootcamp = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
