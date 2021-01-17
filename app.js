@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import path from "path";
+import fileupload from "express-fileupload";
 import "colors";
 import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
@@ -23,6 +24,12 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+// Upload files
+app.use(fileupload());
+
+// Set static folder
+app.use(express.static(path.resolve(process.cwd(), "public")));
 
 // Mount routers
 app.use("/api/v1/courses", coursesRoutes);

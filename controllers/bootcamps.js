@@ -1,3 +1,4 @@
+import path from "path";
 import { Bootcamp } from "../models/Bootcamp.js";
 import { ErrorResponse } from "../utils/errorResponse.js";
 import { asyncHandler } from "../middleware/async.js";
@@ -7,76 +8,7 @@ import { geocoder } from "../utils/geocoder.js";
 // @route    GET /api/v1/bootcamps
 // @access   Public
 export const getBootcamps = asyncHandler(async (req, res, next) => {
-  let query;
-
-  // Copy req.query
-  const reqQuery = { ...req.query };
-
-  // Fields to exclude
-  const removeFields = ["select", "sort", "page", "limit"];
-
-  // Loop over removeFields and delete from query
-  removeFields.forEach((param) => delete reqQuery[param]);
-
-  // Create query string
-  let queryStr = JSON.stringify(reqQuery);
-  queryStr = queryStr.replace(
-    /\b(gt|lt|lte|gte|in)\b/g,
-    (match) => `$${match}`
-  );
-
-  // Finding resource
-  query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
-
-  if (req.query.select) {
-    const fields = req.query.select.split(",").join(" ");
-    console.log(fields);
-    query = query.select(fields);
-  }
-
-  // Sort if query parameters is specified
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(",").join(" ");
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort("-createdAt");
-  }
-
-  // Pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 20;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Bootcamp.countDocuments();
-
-  query = query.skip(startIndex).limit(limit);
-
-  // Executing query
-  const bootcamps = await query;
-
-  // Pagination results
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  res.status(200).json({
-    success: true,
-    count: bootcamps.length,
-    pagination,
-    data: bootcamps,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc     Get a single Bootcamp
@@ -140,8 +72,8 @@ export const deleteBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 // @desc     Get bootcamps within a radius
-// @route     GET /api/v1/bootcamps/radius/:zipcode/:distance
-// @access    Private
+// @route    GET /api/v1/bootcamps/radius/:zipcode/:distance
+// @access   Private
 export const getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
 
@@ -163,5 +95,55 @@ export const getBootcampsInRadius = asyncHandler(async (req, res, next) => {
     success: true,
     count: bootcamps.length,
     data: bootcamps,
+  });
+});
+
+// @desc     Upload photo for bootcamp
+// @route    PUT /api/v1/bootcamps/:id/phot
+// @access   Private
+export const bootcampPhotoUpload = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const bootcamp = await Bootcamp.findById(id);
+
+  if (!bootcamp) {
+    const msg = `Bootcamp not found with id ${id}`;
+    return next(new ErrorResponse(msg, 404));
+  }
+
+  if (!req.files) {
+    const msg = `Please upload a file`;
+    return next(new ErrorResponse(msg, 400));
+  }
+
+  const { file } = req.files;
+
+  // Make sure upload is an image
+  if (!file.mimetype.startsWith("image")) {
+    const msg = `Please upload an image file`;
+    return next(new ErrorResponse(msg, 400));
+  }
+
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD) {
+    const msg = `Please upload an image less than ${
+      process.env.MAX_FILE_UPLOAD / 1000000
+    } mb`;
+    return next(new ErrorResponse(msg, 400));
+  }
+
+  // Create custom filename
+  file.name = `photo_${bootcamp._id}${path.parse(file.name).ext}`;
+
+  // Save file
+  file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
+    if (err) {
+      console.log(err);
+      return next(new ErrorResponse("Problem with file upload", 500));
+    }
+    await Bootcamp.findByIdAndUpdate(id, { photo: file.name });
+  });
+  res.status(200).json({
+    success: true,
+    date: file.name,
   });
 });

@@ -10,22 +10,14 @@ import { asyncHandler } from "../middleware/async.js";
 export const getCourses = asyncHandler(async (req, res, next) => {
   const { bootcampId } = req.params;
 
-  let query;
   if (bootcampId) {
-    query = Course.find({ bootcamp: bootcampId });
+    const courses = Course.find({ bootcamp: bootcampId });
+    return res
+      .status(200)
+      .json({ succcess: true, count: courses.length, data: courses });
   } else {
-    query = Course.find().populate({
-      path: "bootcamp",
-      select: "name description",
-    });
+    res.status(200).json(res.advancedResults);
   }
-  const courses = await query;
-
-  res.status(200).json({
-    success: true,
-    count: courses.length,
-    data: courses,
-  });
 });
 
 // @desc     Get a single course
