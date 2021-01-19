@@ -1,16 +1,16 @@
 import "./config/env.js";
 import express from "express";
 import morgan from "morgan";
-import dotenv from "dotenv";
 import path from "path";
 import fileupload from "express-fileupload";
+import cookieParser from "cookie-parser";
 import "colors";
+
 import { connectDB } from "./config/db.js";
 import { errorHandler } from "./middleware/error.js";
-
-// Route  files
 import coursesRoutes from "./routes/courses.js";
 import bootcampsRoutes from "./routes/bootcamps.js";
+import authRoutes from "./routes/auth.js";
 
 // Connect to database
 connectDB();
@@ -19,6 +19,9 @@ const app = express();
 
 // Body parser
 app.use(express.json());
+
+// Cookie parser
+app.use(cookieParser());
 
 // Dev logging middlware
 if (process.env.NODE_ENV === "development") {
@@ -34,6 +37,7 @@ app.use(express.static(path.resolve(process.cwd(), "public")));
 // Mount routers
 app.use("/api/v1/courses", coursesRoutes);
 app.use("/api/v1/bootcamps", bootcampsRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 app.use(errorHandler);
 

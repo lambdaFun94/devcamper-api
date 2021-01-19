@@ -7,7 +7,8 @@ import { Bootcamp } from "./models/Bootcamp.js";
 import { Course } from "./models/Course.js";
 
 // Connect to db
-mongoose.connect(process.env.MONGO_URI, {
+let mongoURI = process.env.MONGO_URI_DEV;
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
