@@ -12,9 +12,6 @@ import coursesRoutes from "./routes/courses.js";
 import bootcampsRoutes from "./routes/bootcamps.js";
 import authRoutes from "./routes/auth.js";
 
-// Connect to database
-connectDB();
-
 const app = express();
 
 // Body parser
@@ -22,6 +19,9 @@ app.use(express.json());
 
 // Cookie parser
 app.use(cookieParser());
+
+// Connect to database
+connectDB();
 
 // Dev logging middlware
 if (process.env.NODE_ENV === "development") {

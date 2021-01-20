@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// let mongoURI = process.env.MONGO_URI_DEV;
 let mongoURI = process.env.MONGO_URI_DEV;
 if (process.env.NODE_ENV === "production") {
   mongoURI = process.env.MONGO_URI;
