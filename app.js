@@ -11,6 +11,8 @@ import { errorHandler } from "./middleware/error.js";
 import coursesRoutes from "./routes/courses.js";
 import bootcampsRoutes from "./routes/bootcamps.js";
 import authRoutes from "./routes/auth.js";
+import usersRoutes from "./routes/users.js";
+import reviewsRoutes from "./routes/reviews.js";
 
 const app = express();
 
@@ -38,6 +40,8 @@ app.use(express.static(path.resolve(process.cwd(), "public")));
 app.use("/api/v1/courses", coursesRoutes);
 app.use("/api/v1/bootcamps", bootcampsRoutes);
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/reviews", reviewsRoutes);
 
 app.use(errorHandler);
 

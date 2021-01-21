@@ -15,10 +15,12 @@ import { protect, authorize } from "../middleware/auth.js";
 
 // Include other resource routers
 import courseRouter from "./courses.js";
+import reviewRouter from "./reviews.js";
 
 const router = express.Router();
 
 // Re-route to other resource handlers
+router.use("/:bootcampId/reviews", reviewRouter);
 router.use("/:bootcampId/courses", courseRouter);
 
 router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
