@@ -1,2 +1,5 @@
 node_modules/
 config/config.env
+devcamper-documentation.json
+install.sh
+digital_ocean_pw.txt
