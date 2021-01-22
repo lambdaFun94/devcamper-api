@@ -71,7 +71,7 @@ CourseSchema.post("save", function () {
 });
 
 // Call getAverage cost before remove
-CourseSchema.post("remove", function () {
+CourseSchema.pre("remove", function () {
   this.constructor.getAverageCost(this.bootcamp);
 });
 
