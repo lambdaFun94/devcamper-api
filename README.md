@@ -21,3 +21,5 @@ npm start
 
 - Version: 1.0.0
 - License: MIT
+- Built for Brad Traversy's course, [Node.js Api Masterclass](https://www.udemy.com/course/nodejs-api-masterclass/) Thanks Brad!
+
